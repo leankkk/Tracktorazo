@@ -1,13 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
-  <script src="script.js"></script>
+<meta charset="UTF-8">
+<title>Progreso de Donaciones</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+  }
+  #barraFondo {
+    width: 80%;
+    height: 30px;
+    background-color: #ddd;
+    border-radius: 15px;
+    margin: 20px auto;
+    overflow: hidden;
+  }
+  #barraProgreso {
+    height: 100%;
+    width: 0;
+    background-color: #4CAF50;
+    text-align: right;
+    line-height: 30px;
+    color: white;
+    border-radius: 15px 0 0 15px;
+    transition: width 0.5s;
+  }
+  #contador {
+    font-size: 24px;
+    margin-top: 10px;
+  }
+</style>
 </head>
 <body>
-    
+
+<h1>Meta de Donaciones: 2000</h1>
+
+<div id="barraFondo">
+  <div id="barraProgreso">0</div>
+</div>
+
+<div id="contador">0 donaciones</div>
+
+<script>
+const urlJSON = "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLg4cLOg88MG2yM_rmpoEi6K_ZuQQDDWRgr2JNWrLk9-S6goQrO1zIUdL-329CVhN-97VZdlkCIOaqPGWAX18i7J_VDmyB_fe7_FaGBY01miETnks9-ilaxkdDxGW4nRodDLMyTeH_d8zQaPQ9PgwPRbKbMULkjcs9aOl6M2xpoDq-_BKKEyBRtcR9Wb_DED4plPmA8sb_zy4SMsmuUwhrpc0sZiEjZoafAib0KIj5B2sxJkdd3RVHK9DQ_bZcP71NAv-MukPyzwiOWZg-E8rb5N3fBLwnuJbtYhW-cw&lib=M1NlAFhTDTnY-kABtU3HE5VlA31TQkXm1"; // URL de tu Apps Script
+const meta = 2000;
+
+async function actualizarDonaciones() {
+  try {
+    const response = await fetch(urlJSON);
+    const data = await response.json();
+    const total = data.total;
+
+    // Actualizar número
+    document.getElementById("contador").innerText = total + " donaciones";
+
+    // Actualizar barra
+    const porcentaje = Math.min((total / meta) * 100, 100);
+    const barra = document.getElementById("barraProgreso");
+    barra.style.width = porcentaje + "%";
+    barra.innerText = Math.round(porcentaje) + "%";
+
+  } catch (error) {
+    console.error("Error al actualizar donaciones:", error);
+  }
+}
+
+// Actualizar cada 5 segundos
+actualizarDonaciones();
+setInterval(actualizarDonaciones, 5000);
+</script>
+
 </body>
 </html>
