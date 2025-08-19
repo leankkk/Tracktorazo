@@ -8,7 +8,13 @@
     font-family: Arial, sans-serif;
     text-align: center;
     padding: 50px;
+    background-color: #f5f5f5;
   }
+
+  h1 {
+    color: #333;
+  }
+
   #barraFondo {
     width: 80%;
     height: 30px;
@@ -17,6 +23,7 @@
     margin: 20px auto;
     overflow: hidden;
   }
+
   #barraProgreso {
     height: 100%;
     width: 0;
@@ -26,10 +33,14 @@
     color: white;
     border-radius: 15px 0 0 15px;
     transition: width 0.5s;
+    padding-right: 5px;
+    box-sizing: border-box;
   }
+
   #contador {
     font-size: 24px;
     margin-top: 10px;
+    color: #555;
   }
 </style>
 </head>
@@ -38,38 +49,37 @@
 <h1>Meta de Donaciones: 2000</h1>
 
 <div id="barraFondo">
-  <div id="barraProgreso">0</div>
+  <div id="barraProgreso">0%</div>
 </div>
 
 <div id="contador">0 donaciones</div>
 
 <script>
-const urlJSON = "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLg4cLOg88MG2yM_rmpoEi6K_ZuQQDDWRgr2JNWrLk9-S6goQrO1zIUdL-329CVhN-97VZdlkCIOaqPGWAX18i7J_VDmyB_fe7_FaGBY01miETnks9-ilaxkdDxGW4nRodDLMyTeH_d8zQaPQ9PgwPRbKbMULkjcs9aOl6M2xpoDq-_BKKEyBRtcR9Wb_DED4plPmA8sb_zy4SMsmuUwhrpc0sZiEjZoafAib0KIj5B2sxJkdd3RVHK9DQ_bZcP71NAv-MukPyzwiOWZg-E8rb5N3fBLwnuJbtYhW-cw&lib=M1NlAFhTDTnY-kABtU3HE5VlA31TQkXm1"; // URL de tu Apps Script
+const urlJSON = "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLg4cLOg88MG2yM_rmpoEi6K_ZuQQDDWRgr2JNWrLk9-S6goQrO1zIUdL-329CVhN-97VZdlkCIOaqPGWAX18i7J_VDmyB_fe7_FaGBY01miETnks9-ilaxkdDxGW4nRodDLMyTeH_d8zQaPQ9PgwPRbKbMULkjcs9aOl6M2xpoDq-_BKKEyBRtcR9Wb_DED4plPmA8sb_zy4SMsmuUwhrpc0sZiEjZoafAib0KIj5B2sxJkdd3RVHK9DQ_bZcP71NAv-MukPyzwiOWZg-E8rb5N3fBLwnuJbtYhW-cw&lib=M1NlAFhTDTnY-kABtU3HE5VlA31TQkXm1"; // reemplaza con tu URL del Apps Script
 const meta = 2000;
 
-async function actualizarDonaciones() {
+async function cargarDonaciones() {
   try {
     const response = await fetch(urlJSON);
     const data = await response.json();
     const total = data.total;
 
-    // Actualizar número
+    // Actualizar número de donaciones
     document.getElementById("contador").innerText = total + " donaciones";
 
-    // Actualizar barra
+    // Actualizar barra de progreso
     const porcentaje = Math.min((total / meta) * 100, 100);
     const barra = document.getElementById("barraProgreso");
     barra.style.width = porcentaje + "%";
     barra.innerText = Math.round(porcentaje) + "%";
 
   } catch (error) {
-    console.error("Error al actualizar donaciones:", error);
+    console.error("Error al cargar donaciones:", error);
   }
 }
 
-// Actualizar cada 5 segundos
-actualizarDonaciones();
-setInterval(actualizarDonaciones, 5000);
+// Llamada al cargar la página
+cargarDonaciones();
 </script>
 
 </body>
