@@ -5,41 +5,61 @@
 <title>Progreso de Donaciones</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
     padding: 50px;
-    background-color: #f5f5f5;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    color: #333;
   }
 
   h1 {
-    color: #333;
+    color: #2c3e50;
+    font-size: 2.2em;
+    margin-bottom: 20px;
   }
 
   #barraFondo {
     width: 80%;
-    height: 30px;
-    background-color: #ddd;
-    border-radius: 15px;
+    height: 35px;
+    background-color: #e0e0e0;
+    border-radius: 20px;
     margin: 20px auto;
     overflow: hidden;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
   }
 
   #barraProgreso {
     height: 100%;
     width: 0;
-    background-color: #4CAF50;
+    background: linear-gradient(90deg, #4CAF50, #2ecc71);
     text-align: right;
-    line-height: 30px;
+    line-height: 35px;
     color: white;
-    border-radius: 15px 0 0 15px;
-    transition: width 0.5s;
-    padding-right: 5px;
+    border-radius: 20px 0 0 20px;
+    transition: width 0.8s ease-in-out;
+    padding-right: 10px;
     box-sizing: border-box;
+    font-weight: bold;
   }
 
   #contador {
-    font-size: 24px;
-    margin-top: 10px;
+    font-size: 22px;
+    margin-top: 15px;
+    color: #444;
+  }
+
+  #imagenTier {
+    margin-top: 30px;
+    height: 220px;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .tier-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: 15px auto 0;
+    font-size: 14px;
     color: #555;
   }
 </style>
@@ -52,11 +72,30 @@
   <div id="barraProgreso">0%</div>
 </div>
 
+<div class="tier-labels">
+  <span>Tier 1 (400)</span>
+  <span>Tier 2 (800)</span>
+  <span>Tier 3 (1200)</span>
+  <span>Tier 4 (1600)</span>
+  <span>Tier 5 (2000)</span>
+</div>
+
 <div id="contador">0 donaciones</div>
 
+<img id="imagenTier" src="" alt="Progreso del nene" style="opacity:0;">
+
 <script>
-const urlJSON = "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLiEBtL8F-l-wkY10Qeu9iWx8YN4JlQ4JO0-X90iz554XCToc_tYusvLVTuzueS62L4wfqnWNT8YxKJBIzSPo_p_KlpyA8LqEFsk0nMfp6spVboaiSxZyRXE5amWHlsbQkhdeMNagTYk4DQcH48hN_r_6_rLRORlVCBkUA-66Pa58IbGggMCOQAYjb0Fimob8M07NCjpIAJzOrbnnLxphS5xZQuWen4CqtWtwQRXXDpnIUUgIe9MuQbH7k8raEZpy_59xCFulB9e3-oO2gIRNd5RKMZri41MnNjHRiZC&lib=Mm715cfb9D79HJhtTnSc_5llA31TQkXm1"; 
+const urlJSON = "TU_URL_AQUI"; 
 const meta = 2000;
+const tierSize = meta / 5;
+
+const imagenes = [
+  "https://i.ibb.co/4VYy4mc/nene1.png", // Tier 1
+  "https://i.ibb.co/j5pR7yF/nene2.png", // Tier 2
+  "https://i.ibb.co/VQ1fwMw/nene3.png", // Tier 3
+  "https://i.ibb.co/ZmW8mLh/nene4.png", // Tier 4
+  "https://i.ibb.co/5M9gLsm/nene5.png"  // Tier 5
+];
 
 async function cargarDonaciones() {
   try {
@@ -73,6 +112,12 @@ async function cargarDonaciones() {
     barra.style.width = porcentaje + "%";
     barra.innerText = Math.round(porcentaje) + "%";
 
+    // Mostrar imagen según el tier
+    const tier = Math.min(Math.floor(total / tierSize), 4);
+    const imagen = document.getElementById("imagenTier");
+    imagen.src = imagenes[tier];
+    imagen.style.opacity = 1;
+
   } catch (error) {
     console.error("Error al cargar donaciones:", error);
   }
@@ -81,7 +126,7 @@ async function cargarDonaciones() {
 // Llamada inicial
 cargarDonaciones();
 
-// Actualizar cada 5 segundos (5000 ms)
+// Actualizar cada 5 segundos
 setInterval(cargarDonaciones, 5000);
 </script>
 
